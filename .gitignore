@@ -2,7 +2,8 @@
 /Backup
 /Backup1
 /src/Debug
-/.vs/Debug
+/.vs
+/Debug
 
 *.htm
 *.txt

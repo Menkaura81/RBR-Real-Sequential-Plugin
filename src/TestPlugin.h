@@ -137,7 +137,7 @@ public:
 					{
 						if (Keys[i-3] < 256)
 							sprintf(m_szTemp, "Keyboard Button %i", Keys[i-3]);
-						if (Keys[i-3] > 256 & Keys[i-3] < 265)
+						if (Keys[i-3] > 256 && Keys[i-3] < 265)
 							sprintf(m_szTemp, "Mouse Button %i", Keys[i-3] - 256);
 						if (Keys[i-3] > 264)
 							sprintf(m_szTemp, "Joystick Button %i", Keys[i-3] - 264);
