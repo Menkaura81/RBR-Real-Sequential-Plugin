@@ -106,7 +106,7 @@ public:
 			}
 		}
 
-				m_iSelections = 7;
+				m_iSelections = 6;
 				m_pGame->DrawBlackOut( 0.0f, 0.0f, 0.0f, 0.0f );
 				m_pGame->DrawSelection( 0.0f, 68.0f + ( static_cast< float >( m_iSelection ) * 21.0f ), 250.0f );
 				m_pGame->SetMenuColor( IRBRGame::MENU_SELECTION );	
@@ -121,7 +121,6 @@ public:
 				{
 					"Enabled",
 					"Save Changes",
-					"",
 					"Controller",
 					"Gear Up",
 					"Gear Down",
@@ -134,14 +133,14 @@ public:
 					m_pGame->WriteText( 73.0f, 70.0f + ( static_cast< float >( i ) * 21.0f ), aszSelections[ i ] );
 
 
-					if (i > 3 && i < 7)
+					if (i > 2 && i < 6)
 					{
-						if (Keys[i-4] < 256)
-							sprintf(m_szTemp, "Keyboard Button %i", Keys[i-4]);
-						if (Keys[i-4] > 256 & Keys[i-3] < 265)
-							sprintf(m_szTemp, "Mouse Button %i", Keys[i-4] - 256);
-						if (Keys[i-4] > 264)
-							sprintf(m_szTemp, "Joystick Button %i", Keys[i-4] - 264);
+						if (Keys[i-3] < 256)
+							sprintf(m_szTemp, "Keyboard Button %i", Keys[i-3]);
+						if (Keys[i-3] > 256 & Keys[i-3] < 265)
+							sprintf(m_szTemp, "Mouse Button %i", Keys[i-3] - 256);
+						if (Keys[i-3] > 264)
+							sprintf(m_szTemp, "Joystick Button %i", Keys[i-3] - 264);
 					}
 					else
 					{
@@ -152,15 +151,7 @@ public:
 							else
 								sprintf(m_szTemp,"False");
 
-						}
-						if (i == 3)
-						{
-							if (numj > 0)
-								sprintf(m_szTemp,"Index: %i  Name: %s", cindex, jname);
-							else
-								sprintf(m_szTemp,"No Controllers Found");
-
-						}
+						}						
 						if (i == 1)
 						{
 							if (m_dsSec)
@@ -177,12 +168,16 @@ public:
 								m_szTemp[0] = 0;
 							}
 						}
-
-							
-
+						if (i == 2)
+						{
+							if (numj > 0)
+								sprintf(m_szTemp, "Index: %i  Name: %s", cindex, jname);
+							else
+								sprintf(m_szTemp, "No Controllers Found");
+						}
 					}
 					
-					if (listening && i == listenid+4)
+					if (listening && i == listenid+3)
 					{
 						if (GetTickCount() - m_dTime > 1000)
 						{
@@ -210,10 +205,10 @@ public:
 
 		if( bSelect )
 		{
-			if( m_iSelection > 3 && m_iSelection < 7 )
+			if( m_iSelection > 2 && m_iSelection < 6 )
 			{
 				m_dSec = 6;
-				listenid = m_iSelection-4;
+				listenid = m_iSelection-3;
 				listening = true;
 			}
 			else
@@ -240,13 +235,13 @@ public:
 				m_iSelection  = 0;
 		}
 		//switch joystick
-		if( bLeft && m_iSelection == 3 )
+		if( bLeft && m_iSelection == 2 )
 		{
 			--cindex;
 			if (cindex < 0) cindex = 0;
 			SwitchJoystick(hWin, cindex);
 		}
-		if( bRight && m_iSelection == 3 )
+		if( bRight && m_iSelection == 2 )
 		{
 			++cindex;
 			if (cindex > numj-1) cindex = numj-1;

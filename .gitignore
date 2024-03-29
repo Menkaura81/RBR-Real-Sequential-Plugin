@@ -1,7 +1,7 @@
-/.vs
+/src/.vs
 /Backup
 /Backup1
-/Debug
+/src/Debug
 
 *.htm
 *.txt
