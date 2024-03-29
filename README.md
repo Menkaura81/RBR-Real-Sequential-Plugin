@@ -1,6 +1,9 @@
 # RBR Real Sequential Plugin
 Plugin for providing realistic sequential shifter logic to RBR. Neutral and Reverse are locked, you can only engage them if you press the safety trigger in your sequiential stick.
-It uses a modified version of RBRHShift (original version by Racer_S)
+It uses some code from RBRHShift (original version by Racer_S)
+
+## **THERE IS A BUG CONFIGURING YOUR CONTROLS!!: 
+In the ingame config menu, you must have Enable = False while configuring your controls, then you can set it to True and save settings
 
 ### How to build it yourself:
 
