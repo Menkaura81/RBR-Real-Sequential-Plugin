@@ -137,7 +137,6 @@ DWORD WINAPI ShifterMain(LPVOID lpParam)
 						{
 							*(long*)(baseptr + 0x1100) += 1;
 							prevKeyDown0 = true; // Mark this button flag as pressed
-							Sleep(500);
 						}						
 					}
 					else if (!KeyDown(Keys[0]))
@@ -152,20 +151,17 @@ DWORD WINAPI ShifterMain(LPVOID lpParam)
 							{
 								*(long*)(baseptr + 0x1100) -= 1;
 								prevKeyDown1 = true; // Mark this button flag as pressed
-								Sleep(500);
 							}
 							else if (*(long*)(baseptr + 0x1100) < 3 && safety == true) // For downshifting from first to neutral and neutral to reverse, we need the safety trigger
 							{
 								*(long*)(baseptr + 0x1100) -= 1;
 								prevKeyDown1 = true; // Mark this button flag as pressed
-								Sleep(500);
 							}
 							else // If safety trigger is not pressed, play a metalic sound
 							{
 								PlayBlock();
 							}
 						}
-						
 					}
 					else if (!KeyDown(Keys[1]))
 					{
