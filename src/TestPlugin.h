@@ -66,31 +66,7 @@ public:
 
 	virtual void DrawResultsUI( void )
 	{
-		m_pGame->SetMenuColor( IRBRGame::MENU_HEADING );	
-		m_pGame->SetFont  ( IRBRGame::FONT_BIG );
-		m_pGame->WriteText( 130.0f, 49.0f, "Results" );
-
-		m_pGame->SetFont  ( IRBRGame::FONT_SMALL );
-		m_pGame->SetMenuColor( IRBRGame::MENU_TEXT );
-		if( m_fResults[ 2 ] <= 0.0f )
-		{
-			m_pGame->WriteText( 200.0f, 100.0f, "DNF" );
-		}
-		else
-		{
-			char txtCP1[ 32 ];			
-			char txtTimeString[ 32 ];
-			char txtBuffer[ 128 ];
-
-			sprintf( txtBuffer, "Stage Result for \"%s\" ", m_szPlayerName );
-			m_pGame->WriteText( 130.0f, 100.0f, txtBuffer );
-			sprintf( txtBuffer, "CheckPoint1 = %s", NPlugin::FormatTimeString( txtCP1, m_fResults[ 0 ] ) );
-			m_pGame->WriteText( 130.0f, 125.0f, txtBuffer );
-			sprintf( txtBuffer, "CheckPoint2 = %s", NPlugin::FormatTimeString( txtCP1, m_fResults[ 1 ] ) );
-			m_pGame->WriteText( 130.0f, 150.0f, txtBuffer );
-			sprintf( txtBuffer, "Finish = %s", NPlugin::FormatTimeString( txtTimeString, m_fResults[ 2 ] ) );
-			m_pGame->WriteText( 130.0f, 175.0f, txtBuffer );
-		}
+		// Do nothing
 
 	}
 
@@ -106,94 +82,88 @@ public:
 			}
 		}
 
-				m_iSelections = 6;
-				m_pGame->DrawBlackOut( 0.0f, 0.0f, 0.0f, 0.0f );
-				m_pGame->DrawSelection( 0.0f, 68.0f + ( static_cast< float >( m_iSelection ) * 21.0f ), 250.0f );
-				m_pGame->SetMenuColor( IRBRGame::MENU_SELECTION );	
-				m_pGame->DrawFlatBox( 250.0f, 49.0f, 3.0f, 271.0f);
-				m_pGame->SetMenuColor( IRBRGame::MENU_ICON );
-				//m_pGame->DrawBox( GEN_BOX_ICON_MULTI, 260.0f, 49.0f );
+		m_iSelections = 6;
+		m_pGame->DrawBlackOut( 0.0f, 0.0f, 0.0f, 0.0f );
+		m_pGame->DrawSelection( 0.0f, 68.0f + ( static_cast< float >( m_iSelection ) * 21.0f ), 250.0f );
+		m_pGame->SetMenuColor( IRBRGame::MENU_SELECTION );	
+		m_pGame->DrawFlatBox( 250.0f, 49.0f, 3.0f, 271.0f);
+		m_pGame->SetMenuColor( IRBRGame::MENU_ICON );		
+		m_pGame->SetMenuColor( IRBRGame::MENU_HEADING );	
+		m_pGame->SetFont( IRBRGame::FONT_BIG );
+		m_pGame->WriteText( 73.0f, 49.0f, "RBR Real Sequential Plugin" );
+		
+		const char* aszSelections[] =
+		{
+			"Enabled",
+			"Save Changes",
+			"Controller",
+			"Gear Up",
+			"Gear Down",
+			"Safety Trigger",
+		};
 
-				m_pGame->SetMenuColor( IRBRGame::MENU_HEADING );	
-				m_pGame->SetFont( IRBRGame::FONT_BIG );
-				m_pGame->WriteText( 73.0f, 49.0f, "RBR Real Sequential Plugin" );
-				const char* aszSelections[] =
+		m_pGame->SetMenuColor( IRBRGame::MENU_TEXT );
+		for( unsigned int i = 0; i < m_iSelections; ++i )
+		{
+			m_pGame->WriteText( 73.0f, 70.0f + ( static_cast< float >( i ) * 21.0f ), aszSelections[ i ] );
+
+
+			if (i > 2 && i < 6)
+			{
+				if (Keys[i-3] < 256)
+					sprintf(m_szTemp, "Keyboard Button %i", Keys[i-3]);
+				if (Keys[i-3] > 256 && Keys[i-3] < 265)
+					sprintf(m_szTemp, "Mouse Button %i", Keys[i-3] - 256);
+				if (Keys[i-3] > 264)
+					sprintf(m_szTemp, "Joystick Button %i", Keys[i-3] - 264);
+			}
+			else
+			{
+				if (i == 0)
 				{
-					"Enabled",
-					"Save Changes",
-					"Controller",
-					"Gear Up",
-					"Gear Down",
-					"Safety Trigger",
-				};
-
-				m_pGame->SetMenuColor( IRBRGame::MENU_TEXT );
-				for( unsigned int i = 0; i < m_iSelections; ++i )
+					if (onoff)
+						sprintf(m_szTemp,"True");
+					else
+						sprintf(m_szTemp,"False");
+				}						
+				if (i == 1)
 				{
-					m_pGame->WriteText( 73.0f, 70.0f + ( static_cast< float >( i ) * 21.0f ), aszSelections[ i ] );
-
-
-					if (i > 2 && i < 6)
+					if (m_dsSec)
 					{
-						if (Keys[i-3] < 256)
-							sprintf(m_szTemp, "Keyboard Button %i", Keys[i-3]);
-						if (Keys[i-3] > 256 && Keys[i-3] < 265)
-							sprintf(m_szTemp, "Mouse Button %i", Keys[i-3] - 256);
-						if (Keys[i-3] > 264)
-							sprintf(m_szTemp, "Joystick Button %i", Keys[i-3] - 264);
+						if (GetTickCount() - m_dsTime > 1000)
+						{
+							m_dsTime = GetTickCount();
+							--m_dsSec;
+						}
+						sprintf(m_szTemp, "File Saved...", m_dsSec);
 					}
 					else
 					{
-						if (i == 0)
-						{
-							if (onoff)
-								sprintf(m_szTemp,"True");
-							else
-								sprintf(m_szTemp,"False");
-
-						}						
-						if (i == 1)
-						{
-							if (m_dsSec)
-							{
-								if (GetTickCount() - m_dsTime > 1000)
-								{
-									m_dsTime = GetTickCount();
-									--m_dsSec;
-								}
-								sprintf(m_szTemp, "File Saved...", m_dsSec);
-							}
-							else
-							{
-								m_szTemp[0] = 0;
-							}
-						}
-						if (i == 2)
-						{
-							if (numj > 0)
-								sprintf(m_szTemp, "Index: %i  Name: %s", cindex, jname);
-							else
-								sprintf(m_szTemp, "No Controllers Found");
-						}
+						m_szTemp[0] = 0;
 					}
-					
-					if (listening && i == listenid+3)
-					{
-						if (GetTickCount() - m_dTime > 1000)
-						{
-							m_dTime = GetTickCount();
-							--m_dSec;
-						}
-						if (m_dSec == 0) listening = false;
-						sprintf(m_szTemp, "Press A Key... %d", m_dSec);
-					}
-
-
-
-					m_pGame->WriteText( 260.0f, 70.0f + ( static_cast< float >( i ) * 21.0f ), m_szTemp );
 				}
-		
-		// m_pGame->DrawBox( GEN_BOX_LOGOS_CITROEN, 400.0f, 300.0f );
+				if (i == 2)
+				{
+					if (numj > 0)
+						sprintf(m_szTemp, "Index: %i  Name: %s", cindex, jname);
+					else
+						sprintf(m_szTemp, "No Controllers Found");
+				}
+			}
+					
+			if (listening && i == listenid+3)
+			{
+				if (GetTickCount() - m_dTime > 1000)
+				{
+					m_dTime = GetTickCount();
+					--m_dSec;
+				}
+				if (m_dSec == 0) listening = false;
+				sprintf(m_szTemp, "Press A Key... %d", m_dSec);
+			}
+
+			m_pGame->WriteText( 260.0f, 70.0f + ( static_cast< float >( i ) * 21.0f ), m_szTemp );
+		}		
 	}
 
 	//------------------------------------------------------------------------------------------------//
@@ -251,91 +221,38 @@ public:
 		if( bLeft && m_iSelection == 0 )
 		{
 			onoff = !onoff;
-
 		}
 		if( bRight && m_iSelection == 0 )
 		{
 			onoff = !onoff;
-
 		}		
 	}
 
 	//------------------------------------------------------------------------------------------------//
-
 	virtual void TickFrontEndPage( float fTimeDelta )
 	{
+		//Do nothing
 	}
 
 	//------------------------------------------------------------------------------------------------//
 	/// Is called when the player timer starts (after GO! or in case of a false start)
-	virtual void			StageStarted		( int iMap, 
-												  const char* ptxtPlayerName,
-												  bool bWasFalseStart )
+	virtual void StageStarted ( int iMap, const char* ptxtPlayerName, bool bWasFalseStart )
 	{
-		FILE *fp = fopen( "rbrplugin.log", "at" );
-
-		if( fp )
-		{
-			fprintf( fp, "Stage [%d] started. [%s] %s\n", iMap, ptxtPlayerName, bWasFalseStart ? "False Start" : "" );
-			fclose( fp );
-		}
-
-		m_pGame->SetColor( 1.0f, 1.0f, 1.0f, 1.0f );
-		m_pGame->WriteGameMessage( "Stage Started", 10.0f, 50.0f, 150.0f );
+		// Do nothing
 	}
 
 	//------------------------------------------------------------------------------------------------//
 	/// Is called when player finishes stage ( fFinishTime is 0.0f if player failed the stage )
-	virtual void			HandleResults		( float fCheckPoint1, 
-												  float fCheckPoint2,
-												  float fFinishTime,
-												  const char* ptxtPlayerName )
+	virtual void HandleResults ( float fCheckPoint1, float fCheckPoint2, float fFinishTime, const char* ptxtPlayerName )
 	{
-		FILE *fp = fopen( "rbrplugin.log", "at" );
-
-		if( fp )
-		{
-			m_fResults[ 0 ] = fCheckPoint1;
-			m_fResults[ 1 ] = fCheckPoint2;
-			m_fResults[ 2 ] = fFinishTime;
-			strncpy( m_szPlayerName, ptxtPlayerName, 32 );
-
-			if( fFinishTime > 0.0f )
-			{
-				char txtCP1[ 32 ];
-				char txtCP2[ 32 ];
-				char txtTimeString[ 32 ];
-				fprintf( fp, "Stage Result for \"%s\": \n[CP1] = %s\n[CP2] = %s\n[Finish] = %s\n\n", ptxtPlayerName, 
-					NPlugin::FormatTimeString( txtCP1, fCheckPoint1 ),
-					NPlugin::FormatTimeString( txtCP2, fCheckPoint2 ),
-					NPlugin::FormatTimeString( txtTimeString, fFinishTime ) );
-			}
-			else
-			{
-				fprintf( fp, "Stage Result for \"%s\": DNF.\n", ptxtPlayerName );
-			}
-
-			fclose( fp );
-		}
+		//Do nothing
 	}
 
 	//------------------------------------------------------------------------------------------------//
 	/// Is called when a player passed a checkpoint 
-	virtual void			CheckPoint			( float fCheckPointTime,
-												  int   iCheckPointID,
-												  const char* ptxtPlayerName )
+	virtual void CheckPoint ( float fCheckPointTime, int   iCheckPointID, const char* ptxtPlayerName )
 	{
-		FILE *fp = fopen( "rbrplugin.log", "at" );
-
-		if( fp )
-		{
-			char txtTimeString[ 32 ];
-			fprintf( fp, "[CheckPoint %d] : %s : %s\n", iCheckPointID, NPlugin::FormatTimeString( txtTimeString, fCheckPointTime ), ptxtPlayerName );
-			fclose( fp );
-		}
-
-		m_pGame->SetColor( 1.0f, 1.0f, 1.0f, 1.0f );
-		m_pGame->WriteGameMessage( "CHECKPOINT!!!!!!!!!!", 5.0f, 50.0f, 250.0f );
+		// Do nothing
 	}
 
 private:
